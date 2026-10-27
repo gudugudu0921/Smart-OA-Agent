@@ -80,7 +80,7 @@ MySQL 是用户、请假、通知和审计的业务事实源；Redis 只承载�
 ### 1. 获取代码并创建配置
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/gudugudu0921/Smart-OA-Agent.git
 cd Smart-OA-Agent
 cp .env.example .env
 ```

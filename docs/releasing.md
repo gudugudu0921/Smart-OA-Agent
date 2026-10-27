@@ -38,13 +38,13 @@ git diff --cached --stat
 git diff --cached
 git commit -m "Prepare project for public release"
 git branch --show-current
-git remote add origin https://github.com/YOUR_ACCOUNT/Smart-OA-Agent.git
+git remote add origin https://github.com/gudugudu0921/Smart-OA-Agent.git
 git push -u origin HEAD
 ```
 
 如果已有 `origin`，先用 `git remote -v` 核对地址，不要重复添加或覆盖其他仓库配置。
 上传后在 Actions 页面确认 CI 的三个任务全部通过。
-README 的 clone 地址应改为实际地址；发布徽章也应在地址确定后添加。
+README 已使用实际仓库地址；发布徽章应在对应检查实际运行后添加。
 
 ## 创建首版 Release
 
