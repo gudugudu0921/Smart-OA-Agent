@@ -263,7 +263,9 @@ cd backend
 python -m unittest discover -s tests -v
 ```
 
-当前测试集包含 77 项测试，覆盖 Auth、RBAC、Password、Token、Users、Audit、Request ID、依赖降级、Health 和 Bootstrap Admin。
+当前测试集包含 87 项测试，覆盖 Auth、RBAC、Password、Token、Users、Audit、Request ID、依赖降级、Health、Bootstrap Admin、完整审批状态流转和 Agent 多轮参数收集。
+
+审批流程测试使用独立 SQLite 数据库，执行真实 Service、通知和审计写入；Agent 测试使用内存 Checkpoint 和固定模型输出，不调用外部模型。它们不替代真实 MySQL 并发锁及 Redis/LLM 集成验收。
 
 Frontend：
 
@@ -279,6 +281,8 @@ Compose 配置：
 docker compose config --quiet
 ```
 
+GitHub Actions 配置见 [CI workflow](.github/workflows/ci.yml)：每次 Push / Pull Request 自动执行后端测试、前端构建，以及全新 Docker Compose 构建、启动、HTTP 健康检查和真实服务审批验收。
+
 ## 项目结构
 
 ```text
@@ -287,16 +291,40 @@ Smart-OA-Agent/
 ├── frontend/                 # Vue 3、Pinia、Element Plus、Nginx
 ├── docs/                     # 架构、演示与脱敏截图说明
 ├── .github/ISSUE_TEMPLATE/   # Bug / Feature 模板
+├── .github/workflows/       # 自动化测试与 Compose 冒烟检查
+├── scripts/                # 脱敏截图采集与源码打包
 ├── compose.yml
 ├── .env.example
 ├── SECURITY.md
 ├── CONTRIBUTING.md
+├── CHANGELOG.md
+├── LICENSE
 └── README.md
 ```
 
 ## 项目截图
 
-公开截图尚未纳入仓库。截图规范见 [`docs/screenshots/README.md`](docs/screenshots/README.md)：截图前必须使用虚构数据，并移除密码、Token、API Key、邮箱和其他敏感信息。
+以下截图来自项目真实前端构建，使用完全虚构的接口数据；用于展示界面，不代表真实后端或外部 LLM 联调验收。截图来源与重现方法见 [截图说明](docs/screenshots/README.md)。
+
+### 登录
+
+![登录界面](docs/screenshots/login.png)
+
+### Agent 多轮对话
+
+![Agent 对话界面（虚构数据）](docs/screenshots/agent.png)
+
+### 主管审批
+
+![主管审批界面（虚构数据）](docs/screenshots/manager-approval.png)
+
+### 用户管理
+
+![用户管理界面（虚构数据）](docs/screenshots/user-management.png)
+
+### 审计日志
+
+![审计日志界面（虚构数据）](docs/screenshots/audit-log.png)
 
 ## Known Limitations
 
@@ -320,7 +348,8 @@ Smart-OA-Agent/
 - [ ] HTTPS deployment
 - [ ] 5-user Alpha test
 - [ ] 20-user Beta test
-- [ ] CI/CD
+- [x] CI：后端测试、前端构建与 Compose 冒烟检查
+- [ ] CD：自动部署
 - [ ] Frontend chunk optimization
 - [ ] General Chat prompt improvement
 
@@ -331,4 +360,8 @@ Smart-OA-Agent/
 
 ## License
 
-License 尚未决定。在正式公开发布前，应由项目所有者选择并添加合适的许可证。
+本项目采用 [MIT License](LICENSE)。
+
+## 发布与源码打包
+
+首次上传、版本标签、Release 和安全源码压缩包生成步骤见 [发布指南](docs/releasing.md)；版本变化见 [CHANGELOG](CHANGELOG.md)。
